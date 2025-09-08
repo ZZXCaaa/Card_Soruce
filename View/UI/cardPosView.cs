@@ -41,6 +41,7 @@ namespace Soruce.View.UI
                 GameObject g =Instantiate(_cardPosEntity.cardPrefab,_cardPosEntity.spawnPoint.position,_cardPosEntity.spawnPoint.rotation);
                 Debug.Log(_cardPosEntity.cardDatas[i].ImageSprite);
                 g.GetComponent<SpriteRenderer>().sprite = _cardPosEntity.cardDatas[i].ImageSprite;
+                g.GetComponent<SpriteRenderer>().sortingOrder = i;
                 _cardPosEntity.handCards.Add(g);
                 _cardPosEntity.timer.Add(0.0f);
                 yield return new WaitForSeconds(delaytime);
@@ -61,7 +62,8 @@ namespace Soruce.View.UI
                 _cardPosEntity.timer[i]= _cardPosEntity.timer[i] + 0.05f;
                 float p = firstCardPos + i * cardSpacing;
                 Vector3 splinePosition = spline.EvaluatePosition(p);
-                splinePosition.y += 2.0f;
+                splinePosition.y += 1.0f;
+                splinePosition.x += 1.0f;
                 Vector3 forwoed = spline.EvaluateTangent(p);
                 Vector3 up = spline.EvaluateUpVector(p);
                 Quaternion rotation = Quaternion.LookRotation(up,Vector3.Cross(up,forwoed.normalized));

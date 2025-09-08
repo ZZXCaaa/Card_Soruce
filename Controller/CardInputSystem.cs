@@ -18,7 +18,7 @@ namespace Soruce.UI
             InputActionMap actionMap = Mouseaction.FindActionMap("CardButton");
             mouseAction =  actionMap.FindAction("MouseButton");
             mouseAction.performed += callButtonMouse;
-            mouseAction.canceled += exitButtonMouse;
+            mouseAction.canceled  += exitButtonMouse;
             Mouseaction.Enable();
         }
 
@@ -31,9 +31,8 @@ namespace Soruce.UI
 
         public void callButtonMouse(InputAction.CallbackContext context)
         {
-
                 Debug.Log("callButtonMouse");
-                CatchCardDrang(true,new Vector3(1.5f,1.5f,1.5f));
+                CatchCardDrang(true,new Vector3(1.2f,1.2f,1.2f));
                 Debug.Log("OnPointerDown");
         }
         public void exitButtonMouse(InputAction.CallbackContext context)
@@ -42,11 +41,11 @@ namespace Soruce.UI
             CatchCardDrang(false,new Vector3(1.0f,1.0f,1.0f));
             Debug.Log("Down");
         }
-
+        
         private void CatchCardDrang(bool isDrag , Vector3 scale)
         {
             Vector3 mouseWorldPos = Input.mousePosition;
-            mouseWorldPos.z = 9.0f;
+            mouseWorldPos.z = 11.0f;
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(mouseWorldPos);
             RaycastHit2D hit = Physics2D.Raycast(worldPos,Vector2.zero);
             if (hit.collider == null)
@@ -55,13 +54,18 @@ namespace Soruce.UI
                 return;
             }
             Debug.Log(hit.collider.gameObject);
-            CaedDrag caedDrag = hit.collider.GetComponentInParent<CaedDrag>();
-            if (caedDrag == null)
+            CardInputSystemView cardInputSystemView = hit.collider.GetComponentInParent<CardInputSystemView>();
+            if (cardInputSystemView == null)
             {
                 Debug.Log("no caedDrag");
                 return;
             }
-                caedDrag.selectedCard(isDrag,scale);
+
+            if (cardInputSystemView.isRead)
+            {
+                cardInputSystemView.isReturCard();
+            }
+            cardInputSystemView.selectedCard(isDrag,scale);
         }
         
     }
