@@ -1,7 +1,8 @@
 
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+
 namespace Soruce.View.UI
 {
     public class CaedDrag : MonoBehaviour
@@ -10,41 +11,39 @@ namespace Soruce.View.UI
         private bool isDrag = false;
         [SerializeField]
         private Camera camera;
+     
         private float x;
         private float y;
-
-        public void OnMouseDown()
-        {
-            isDrag   = true;
-            Debug.Log("OnPointerDown");
-           // x = transform.localPosition.x - Input.mousePosition.x;
-           // y = transform.localPosition.y - Input.mousePosition.y;
-        }
-        public void OnMouseUp()
-        {
-            Debug.Log("Down");
-            isDrag = false;
-        }
-
-        private void Update()
-        {
-            if (isDrag)
-            {
-                Drag();
-            }
-        }
-        private void Drag()
-        {
-            Vector3 mouseWorldPos = Input.mousePosition;
-            mouseWorldPos.z = 10.0f;
-            transform.position = camera.ScreenToWorldPoint(mouseWorldPos);
-
-        }
+        
+        
         private void Awake()
         {
             if (camera == null)
                 camera = Camera.main;
         }
+        private void Update()
+        {
+            if (isDrag)
+            { 
+              Drag();
+            }
+        }
 
+        public void selectedCard(bool Drag , Vector3 scale)
+        {
+            changsScale(scale,0.0f);
+            isDrag = Drag;
+        }
+        private void Drag()
+        {
+            Vector3 mouseWorldPos = Input.mousePosition;
+            mouseWorldPos.z = 9.0f;
+            transform.position = camera.ScreenToWorldPoint(mouseWorldPos);
+        }
+        private void changsScale(Vector3 scale,float Posz)
+        {
+            this.transform.localScale = scale;
+            transform.position = new Vector3(transform.position.x,transform.position.y,Posz);
+        }
     }
 }

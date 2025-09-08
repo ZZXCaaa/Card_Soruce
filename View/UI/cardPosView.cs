@@ -23,7 +23,6 @@ namespace Soruce.View.UI
         [SerializeField]
         private Transform spawnPoint;
         public List<cardData> cardDatas = new ();
-        private int a = 0;
         private void Start()
         {
             _cardPosEntity.Initialize();
