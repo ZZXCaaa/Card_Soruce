@@ -18,6 +18,11 @@ namespace Soruce.View.UI
         private Vector3 startPos;
         [SerializeField]
         private Quaternion CardRotaion;
+        [SerializeField]
+        public cardData cardData;
+        [SerializeField]
+        public bool isEnterBox = false;
+      
         private void Awake()
         {
             mCardInputSystem = new MCardInputSystem();
@@ -60,9 +65,11 @@ namespace Soruce.View.UI
 
         public void BackCard()
         {
-            Debug.Log("zzzzz");
-            transform.position = startPos;
-            transform.rotation = CardRotaion;
+            if (!isEnterBox)
+            {
+                transform.position = startPos;
+                transform.rotation = CardRotaion;
+            }
         }
 
         public void OnMouseEnter()

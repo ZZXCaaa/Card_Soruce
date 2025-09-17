@@ -39,9 +39,10 @@ namespace Soruce.View.UI
             for (int i = 0; i < _cardPosEntity.maxSize; i++)
             {
                 GameObject g =Instantiate(_cardPosEntity.cardPrefab,_cardPosEntity.spawnPoint.position,_cardPosEntity.spawnPoint.rotation);
-                Debug.Log(_cardPosEntity.cardDatas[i].ImageSprite);
                 g.GetComponent<SpriteRenderer>().sprite = _cardPosEntity.cardDatas[i].ImageSprite;
                 g.GetComponent<SpriteRenderer>().sortingOrder = i;
+                g.GetComponent<CardInputSystemView>().cardData = _cardPosEntity.cardDatas[i];
+                g.tag = "Card";
                 _cardPosEntity.handCards.Add(g);
                 _cardPosEntity.timer.Add(0.0f);
                 yield return new WaitForSeconds(delaytime);

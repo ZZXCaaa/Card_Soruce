@@ -13,6 +13,8 @@ namespace Soruce.UI
         [SerializeField]
         private InputActionAsset Mouseaction;
         private InputAction mouseAction;
+        [SerializeField]
+        GameObject tableCard;
         public void OnEnable()
         {
             InputActionMap actionMap = Mouseaction.FindActionMap("CardButton");
@@ -31,15 +33,12 @@ namespace Soruce.UI
 
         public void callButtonMouse(InputAction.CallbackContext context)
         {
-                Debug.Log("callButtonMouse");
                 CatchCardDrang(true,new Vector3(1.2f,1.2f,1.2f));
-                Debug.Log("OnPointerDown");
         }
         public void exitButtonMouse(InputAction.CallbackContext context)
         {
-            Debug.Log("exitButtonMouse");
             CatchCardDrang(false,new Vector3(1.0f,1.0f,1.0f));
-            Debug.Log("Down");
+            tableCard.GetComponent<TableView>().cardPosMove();
         }
         
         private void CatchCardDrang(bool isDrag , Vector3 scale)
@@ -50,14 +49,12 @@ namespace Soruce.UI
             RaycastHit2D hit = Physics2D.Raycast(worldPos,Vector2.zero);
             if (hit.collider == null)
             {
-                Debug.Log("no hit.collider");
                 return;
             }
             Debug.Log(hit.collider.gameObject);
             CardInputSystemView cardInputSystemView = hit.collider.GetComponentInParent<CardInputSystemView>();
             if (cardInputSystemView == null)
             {
-                Debug.Log("no caedDrag");
                 return;
             }
 
