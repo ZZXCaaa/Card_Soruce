@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -32,35 +31,44 @@ namespace Soruce.View.UI
         }
         public void cardPosMove()
         {
+            // 獲取曲線對象引用
             Spline spline = Tablespline.Spline;
 
+            // 設定最大卡牌數量為13
             int maxCards = 13;
+            // 計算實際要排列的卡牌數量，不超過最大值
             int actualCount = Mathf.Min(tableCard.Count, maxCards);
+            // 確保至少有1個間距(未使用的變量)
             int count = Mathf.Max(actualCount - 1, 1);
 
-// 計算平均間距並居中排列
+            // 計算卡牌之間的間距，以1除以最大卡牌數
             float spacing = 1f / maxCards;
-            float firstT = 0.5f - (actualCount - 1) * spacing / 2f;
+            // 計算第一張卡牌的位置參數t，實現居中效果
+            // 0.5f 是曲線的中點，(actualCount - 1) * spacing / 2f 是向左偏移量
+            float firstT = 0.5f - (actualCount - 1) * spacing * Mathf.Min(actualCount,maxCards/2)/maxCards;
 
+            // 遍歷所有需要排列的卡牌
             for (int i = 0; i < actualCount; i++)
             {
+                // 計算當前卡牌在曲線上的t參數值
                 float t = firstT + i * spacing;
-                t = Mathf.Clamp01(t); // 保證在 Spline 範圍內
-
+                // 確保t值在0到1之間，防止超出曲線範圍
+                t = Mathf.Clamp01(t);
+                // 根據t值計算曲線上的位置
                 Vector3 position = spline.EvaluatePosition(t);
-                position.z = 0f; // 固定在 2D 平面
-
+                // 將z座標設為0，確保卡牌在2D平面上
+                position.z = 0f;
+                // 在y軸上加上3個單位的偏移
+                position.y += 2f;
+                // 設置卡牌的位置
                 tableCard[i].transform.position = position;
-
-                Debug.Log($"Card {i} → t: {t:F2}, pos: {position}");
+                tableCard[i].transform.rotation = new Quaternion(0,0,0,0);
+                // 輸出調試信息：顯示卡牌編號、t值和最終位置
+                //tableCard[i].GetComponent<CardInputSystemView>().cardData.number
             }
 
 
         }
-
-        private void Update()
-        {
-            cardPosMove();
-        }
+        
     }
 }

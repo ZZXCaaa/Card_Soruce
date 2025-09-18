@@ -74,10 +74,9 @@ namespace Soruce.View.UI
 
         public void OnMouseEnter()
         {
-            
             sort = GetComponent<SpriteRenderer>().sortingOrder;
             GetComponent<SpriteRenderer>().sortingOrder = 100;
-            changsScale(new Vector3(1.2f,1.2f,1.2f),0.0f);;
+            changsScale(new Vector3(1.2f,1.2f,1.2f),0.0f);
         }
 
         public void OnMouseExit()
