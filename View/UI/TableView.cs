@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Soruce.UI.Model_Entity;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -6,38 +9,49 @@ namespace Soruce.View.UI
 {
     public class TableView : MonoBehaviour
     {
-        public List<GameObject> tableCard;
+
+        public Mtable mtable;
         [SerializeField]
         private SplineContainer Tablespline;
-        [SerializeField]
-        private float a;
+        private void Start()
+        {
+            mtable = new Mtable();
+            mtable.Initialize();
+        }
+
         public void OnCollisionEnter2D(Collision2D other)
         {
-            if (!other.gameObject.CompareTag("Card"))
+            if (!other.gameObject.CompareTag("Card")|| other.gameObject.GetComponent<CardInputSystemView>() == null)
             {
                 return;
             }
             other.gameObject.GetComponent<CardInputSystemView>().isEnterBox = true;
-            tableCard.Add(other.gameObject);
+            mtable.tableCard.Add(other.gameObject);
         }
+
+ 
         public void OnCollisionExit2D(Collision2D other)
         {
-            if (!other.gameObject.CompareTag("Card"))
+            if (!other.gameObject.CompareTag("Card") || other.gameObject.GetComponent<CardInputSystemView>() )
             {
                 return;
             }
             other.gameObject.GetComponent<CardInputSystemView>().isEnterBox = false;
-            tableCard.Remove(other.gameObject);
+            mtable.tableCard.Remove(other.gameObject);
         }
         public void cardPosMove()
         {
+            if (mtable.tableCard == null)
+            {
+                return;
+            }
             // 獲取曲線對象引用
             Spline spline = Tablespline.Spline;
 
             // 設定最大卡牌數量為13
             int maxCards = 13;
             // 計算實際要排列的卡牌數量，不超過最大值
-            int actualCount = Mathf.Min(tableCard.Count, maxCards);
+            int actualCount = Mathf.Min( mtable.tableCard.Count, maxCards);
             // 確保至少有1個間距(未使用的變量)
             int count = Mathf.Max(actualCount - 1, 1);
 
@@ -48,6 +62,8 @@ namespace Soruce.View.UI
             float firstT = 0.5f - (actualCount - 1) * spacing * Mathf.Min(actualCount,maxCards/2)/maxCards;
 
             // 遍歷所有需要排列的卡牌
+            mtable.tableCard =  mtable.tableCard.OrderByDescending(card =>
+                card.GetComponent<CardInputSystemView>().cardData.number).ToList();
             for (int i = 0; i < actualCount; i++)
             {
                 // 計算當前卡牌在曲線上的t參數值
@@ -61,14 +77,10 @@ namespace Soruce.View.UI
                 // 在y軸上加上3個單位的偏移
                 position.y += 2f;
                 // 設置卡牌的位置
-                tableCard[i].transform.position = position;
-                tableCard[i].transform.rotation = new Quaternion(0,0,0,0);
+                mtable.tableCard[i].transform.position = position;
+                mtable.tableCard[i].transform.rotation = new Quaternion(0,0,0,0);
                 // 輸出調試信息：顯示卡牌編號、t值和最終位置
-                //tableCard[i].GetComponent<CardInputSystemView>().cardData.number
             }
-
-
         }
-        
     }
 }

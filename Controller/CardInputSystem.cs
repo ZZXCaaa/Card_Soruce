@@ -38,6 +38,10 @@ namespace Soruce.UI
         public void exitButtonMouse(InputAction.CallbackContext context)
         {
             CatchCardDrang(false,new Vector3(1.0f,1.0f,1.0f));
+            if (tableCard.GetComponent<TableView>() == null)
+            {
+                return;
+            }
             tableCard.GetComponent<TableView>().cardPosMove();
         }
         
