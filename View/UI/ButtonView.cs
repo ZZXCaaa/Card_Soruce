@@ -11,16 +11,21 @@ namespace Soruce.View.UI
         private Mtable mtable;
         [SerializeField]
         GameObject table;
+        [SerializeField]
+        GameObject ComparisonCards;
         private void Start()
         { 
             mtable = new Mtable();
             mtable.Initialize();
-           
         }
 
         public void click()
         {
-            Debug.Log( table.GetComponent<TableView>().mtable.tableCard.Count);
+            ComparisonCards.GetComponent<ComparisonCards>().CardClick(table);
+            
         }
+        
+        
     }
+    
 }

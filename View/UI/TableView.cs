@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Soruce.Model.Model_E;
 using Soruce.UI.Model_Entity;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -13,6 +14,9 @@ namespace Soruce.View.UI
         public Mtable mtable;
         [SerializeField]
         private SplineContainer Tablespline;
+        //Test 以後更改偵測玩家
+        public List<cardData> othercardDatas = new ();
+        //---------
         private void Start()
         {
             mtable = new Mtable();
@@ -27,17 +31,19 @@ namespace Soruce.View.UI
             }
             other.gameObject.GetComponent<CardInputSystemView>().isEnterBox = true;
             mtable.tableCard.Add(other.gameObject);
+            cardPosMove();
         }
 
  
         public void OnCollisionExit2D(Collision2D other)
         {
-            if (!other.gameObject.CompareTag("Card") || other.gameObject.GetComponent<CardInputSystemView>() )
+            if (!other.gameObject.CompareTag("Card"))
             {
                 return;
             }
             other.gameObject.GetComponent<CardInputSystemView>().isEnterBox = false;
             mtable.tableCard.Remove(other.gameObject);
+            //cardPosMove();
         }
         public void cardPosMove()
         {
@@ -62,8 +68,10 @@ namespace Soruce.View.UI
             float firstT = 0.5f - (actualCount - 1) * spacing * Mathf.Min(actualCount,maxCards/2)/maxCards;
 
             // 遍歷所有需要排列的卡牌
-            mtable.tableCard =  mtable.tableCard.OrderByDescending(card =>
-                card.GetComponent<CardInputSystemView>().cardData.number).ToList();
+            mtable.tableCard = mtable.tableCard
+            .OrderBy(card => card.GetComponent<CardInputSystemView>().cardData.number) // 数字从小到大优先
+            .ThenByDescending(card => card.GetComponent<CardInputSystemView>().cardData.type) // 其他花色排序
+            .ToList();
             for (int i = 0; i < actualCount; i++)
             {
                 // 計算當前卡牌在曲線上的t參數值
@@ -79,6 +87,7 @@ namespace Soruce.View.UI
                 // 設置卡牌的位置
                 mtable.tableCard[i].transform.position = position;
                 mtable.tableCard[i].transform.rotation = new Quaternion(0,0,0,0);
+                mtable.tableCard[i].GetComponent<SpriteRenderer>().sortingOrder = i;
                 // 輸出調試信息：顯示卡牌編號、t值和最終位置
             }
         }

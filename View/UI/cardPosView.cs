@@ -12,7 +12,6 @@ namespace Soruce.View.UI
 {
     public class cardPosView : MonoBehaviour
     {
-        
         private cardPosEntity _cardPosEntity = new cardPosEntity();
         [SerializeField]
         private int maxSiz;
@@ -31,6 +30,14 @@ namespace Soruce.View.UI
             _cardPosEntity.splineContainer = splineContainer;
             _cardPosEntity.spawnPoint = spawnPoint;
             _cardPosEntity.cardDatas = cardDatas;
+            for (int i = 0; i < cardDatas.Count; i++)
+            {
+                int rang =  Random.Range(i,cardDatas.Count);
+                var card = cardDatas[i];
+                cardDatas[i] = cardDatas[rang];
+                cardDatas[rang] = card;
+            }
+            
             RuneCardPos();
         }
          private IEnumerator delaySpawCard(float delaytime = 0.1f)
@@ -46,7 +53,8 @@ namespace Soruce.View.UI
                 _cardPosEntity.handCards.Add(g);
                 _cardPosEntity.timer.Add(0.0f);
                 yield return new WaitForSeconds(delaytime);
-            }
+            } 
+            onChangCardPos();
         }
         public void UpdateCardPos()
         {
@@ -77,11 +85,23 @@ namespace Soruce.View.UI
             if (_cardPosEntity.timer.All(t=> t>=1.0f))
             {
                 CancelInvoke("UpdateCardPos");
+              
             }
         }
         public void RuneCardPos()
         {
             StartCoroutine(delaySpawCard(0.1f));
+        
+        }
+
+        private void onChangCardPos()
+        {
+            Debug.Log("zzxc");
+            _cardPosEntity.handCards = _cardPosEntity.handCards
+                .OrderBy(data => data.GetComponent<CardInputSystemView>().cardData.number)
+                .ThenBy(data => data.GetComponent<CardInputSystemView>().cardData.type)
+                .ToList();
+            UpdateCardPos();
         }
     }
 }

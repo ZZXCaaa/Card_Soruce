@@ -34,6 +34,7 @@ namespace Soruce.UI
         public void callButtonMouse(InputAction.CallbackContext context)
         {
                 CatchCardDrang(true,new Vector3(1.2f,1.2f,1.2f));
+                tableCard.GetComponent<TableView>().cardPosMove();
         }
         public void exitButtonMouse(InputAction.CallbackContext context)
         {

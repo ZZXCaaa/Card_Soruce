@@ -7,7 +7,6 @@ namespace Soruce.UI.Model_Entity
     {
 
         public List<GameObject> tableCard;
-
         public void Initialize()
         {
             tableCard = new List<GameObject>();
