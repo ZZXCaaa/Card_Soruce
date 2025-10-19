@@ -1,5 +1,2 @@
-<<<<<<< HEAD
 GGGGG
-=======
-abcccccc
->>>>>>> 4c066c5dc7f10275d1e5a27ce3a620cd02bfda7c
+
