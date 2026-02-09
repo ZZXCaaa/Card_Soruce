@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Soruce.UI.Model_Entity
 {
     [Serializable]
-    public struct cardData
+    public class cardData
     {
         public int number;
         public E_cardData type;

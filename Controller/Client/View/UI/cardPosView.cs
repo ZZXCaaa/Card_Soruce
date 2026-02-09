@@ -1,7 +1,9 @@
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Soruce.Model.Model_E;
 using Soruce.UI.Model_Entity;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -27,7 +29,7 @@ namespace Soruce.View.UI
             _cardPosEntity.cardPrefab = cardprefab;
             _cardPosEntity.splineContainer = splineContainer;
             _cardPosEntity.spawnPoint = spawnPoint;
-            _cardPosEntity.cardDatas = cardDatas;
+            //_cardPosEntity.cardDatas = cardDatas;
             //打亂
             //for (int i = 0; i < cardDatas.Count; i++)
             //{
@@ -36,12 +38,17 @@ namespace Soruce.View.UI
                // cardDatas[i] = cardDatas[rang];
                 //cardDatas[rang] = card;
             //}
+            for (int i = 0; i < cardAll.Length-1; i++)
+            {
+                _cardPosEntity.cardDatas.Add(cardDatas[cardAll[i]]);
+            }
+            //cardDatas = cardDatas.Except(matched).ToList();
             RuneCardPos();
         }
          private IEnumerator delaySpawCard(float delaytime = 0.1f)
         {
             InvokeRepeating("UpdateCardPos",0.1f,0.01f);
-            for (int i = 0; i < _cardPosEntity.maxSize; i++)
+            for (int i = 0; i < _cardPosEntity.maxSize-1; i++)
             {
                 GameObject g =Instantiate(_cardPosEntity.cardPrefab,_cardPosEntity.spawnPoint.position,_cardPosEntity.spawnPoint.rotation);
                 g.GetComponent<SpriteRenderer>().sprite = _cardPosEntity.cardDatas[i].ImageSprite;

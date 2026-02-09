@@ -62,7 +62,8 @@ public class WebSocketClient : MonoBehaviour
         string json = JsonUtility.ToJson(dto);
         byte[] bytes = Encoding.UTF8.GetBytes(json);
 
-        await socket.SendAsync(
+        await socket.SendAsync
+        (
             new ArraySegment<byte>(bytes),
             WebSocketMessageType.Text,
             true,

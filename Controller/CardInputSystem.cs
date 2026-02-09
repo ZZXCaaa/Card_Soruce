@@ -55,7 +55,6 @@ namespace Soruce.UI
             {
                 return;
             }
-            Debug.Log(hit.collider.gameObject);
             CardInputSystemView cardInputSystemView = hit.collider.GetComponentInParent<CardInputSystemView>();
             if (cardInputSystemView == null)
             {
