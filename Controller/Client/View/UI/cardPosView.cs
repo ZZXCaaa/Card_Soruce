@@ -2,15 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Soruce.UI;
 using Soruce.UI.Model_Entity;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Splines;
 
 namespace Soruce.View.UI
 {
-    public class cardPosView : MonoBehaviour
+    public  class cardPosView : MonoBehaviour
     {
         private cardPosEntity _cardPosEntity = new cardPosEntity();
         [SerializeField]
@@ -22,22 +20,22 @@ namespace Soruce.View.UI
         [SerializeField]
         private Transform spawnPoint;
         public List<cardData> cardDatas = new ();
-        private void Start()
+        public void DealingCards(int[] cardAll ,int MaxSize)
         {
             _cardPosEntity.Initialize();
-            _cardPosEntity.maxSize = maxSiz;
+            _cardPosEntity.maxSize = MaxSize;
             _cardPosEntity.cardPrefab = cardprefab;
             _cardPosEntity.splineContainer = splineContainer;
             _cardPosEntity.spawnPoint = spawnPoint;
             _cardPosEntity.cardDatas = cardDatas;
-            for (int i = 0; i < cardDatas.Count; i++)
-            {
-                int rang =  Random.Range(i,cardDatas.Count);
-                var card = cardDatas[i];
-                cardDatas[i] = cardDatas[rang];
-                cardDatas[rang] = card;
-            }
-            
+            //打亂
+            //for (int i = 0; i < cardDatas.Count; i++)
+            //{
+              //  int rang =  Random.Range(i,cardDatas.Count);
+               // var card = cardDatas[i];
+               // cardDatas[i] = cardDatas[rang];
+                //cardDatas[rang] = card;
+            //}
             RuneCardPos();
         }
          private IEnumerator delaySpawCard(float delaytime = 0.1f)
@@ -48,6 +46,7 @@ namespace Soruce.View.UI
                 GameObject g =Instantiate(_cardPosEntity.cardPrefab,_cardPosEntity.spawnPoint.position,_cardPosEntity.spawnPoint.rotation);
                 g.GetComponent<SpriteRenderer>().sprite = _cardPosEntity.cardDatas[i].ImageSprite;
                 g.GetComponent<SpriteRenderer>().sortingOrder = i;
+                
                 g.GetComponent<CardInputSystemView>().cardData = _cardPosEntity.cardDatas[i];
                 g.tag = "Card";
                 _cardPosEntity.handCards.Add(g);
@@ -96,7 +95,6 @@ namespace Soruce.View.UI
 
         private void onChangCardPos()
         {
-            Debug.Log("zzxc");
             _cardPosEntity.handCards = _cardPosEntity.handCards
                 .OrderBy(data => data.GetComponent<CardInputSystemView>().cardData.number)
                 .ThenBy(data => data.GetComponent<CardInputSystemView>().cardData.type)
